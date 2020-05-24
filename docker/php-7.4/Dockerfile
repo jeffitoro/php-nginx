@@ -223,11 +223,11 @@ RUN echo @testing http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repo
 #    apk del .sys-deps
 #    ln -s /usr/bin/php7 /usr/bin/php
 
-ADD docker/php-7.4/conf/supervisord.conf /etc/supervisord.conf
+COPY ./docker/php-7.4/conf/supervisord.conf /etc
 
 # Copy our nginx config
 RUN rm -Rf /etc/nginx/nginx.conf
-ADD docker/php-7.4/conf/nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/php-7.4/conf/nginx.conf /etc/nginx
 
 # nginx site conf
 RUN mkdir -p /etc/nginx/sites-available/ && \
@@ -235,12 +235,12 @@ mkdir -p /etc/nginx/sites-enabled/ && \
 mkdir -p /etc/nginx/ssl/ && \
 rm -Rf /var/www/* && \
 mkdir /var/www/html/
-ADD docker/php-7.4/conf/nginx-site.conf /etc/nginx/sites-available/default.conf
-ADD docker/php-7.4/conf/nginx-site-ssl.conf /etc/nginx/sites-available/default-ssl.conf
+COPY ./docker/php-7.4/conf/default.conf /etc/nginx/sites-available
+COPY ./docker/php-7.4/conf/default-ssl.conf /etc/nginx/sites-available
 RUN ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
 ## disabled due to license changes (to fix in next release)
-# Add docker/php-7.4/GeoLite2 databases (https://dev.maxmind.com/geoip/geoip2/geolite2/)
+# COPY ./docker/php-7.4/GeoLite2 databases (https://dev.maxmind.com/geoip/geoip2/geolite2/)
 #RUN curl -fSL http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz -o /etc/nginx/GeoLite2-City.mmdb.gz \
 #    && curl -fSL http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz -o /etc/nginx/GeoLite2-Country.mmdb.gz \
 #    && gunzip /etc/nginx/GeoLite2-City.mmdb.gz \
@@ -272,12 +272,12 @@ RUN echo "cgi.fix_pathinfo=0" > ${php_vars} &&\
 
 
 # Add Scripts
-ADD docker/php-7.4/scripts/start.sh /start.sh
+COPY ./docker/php-7.4/scripts/start.sh /
 RUN chmod 755 /start.sh
 
 # copy in code
-ADD index.php /var/www/html/
-# ADD docker/php-7.4/errors/ /var/www/errors
+COPY ./index.php /var/www/html/
+# COPY ./docker/php-7.4/errors/ /var/www/errors
 
 
 EXPOSE 443 80

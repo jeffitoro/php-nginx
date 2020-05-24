@@ -4,7 +4,7 @@ services:
   web-php:
     build: 
       context: ./
-      dockerfile: .docker/php-7.4/Dockerfile
+      dockerfile: docker/php-7.4/Dockerfile
     # image: richarvey/nginx-php-fpm:latest
     volumes:
      - ./:/var/www/html
