@@ -1,12 +1,12 @@
 version: "3.7"
 
 services: 
-  web-php:
+  website-php:
     build: 
       context: ./
-      dockerfile: docker/php-7.4/Dockerfile
+      dockerfile: .docker/php-nginx_buster/Dockerfile
     # image: richarvey/nginx-php-fpm:latest
-    volumes:
-     - ./:/var/www/html
+    # volumes:
+    #  - ./:/var/www/html/laravel
     ports:
      - "8080:80"
