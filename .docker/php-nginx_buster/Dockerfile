@@ -140,6 +140,16 @@ RUN chmod 0644 /etc/cron.d/laravel-scheduler
 
 ADD ./.docker/php-nginx_buster/config/laravel.ini /usr/local/etc/php/conf.d
 
+RUN sed -i -e 's/pm = .+?/pm = dynamic/' \
+ -e 's/pm\.max_children = \d/pm\.max_children = 70/' \
+ -e 's/pm\.start_servers = \d/pm\.start_servers = 20/' \
+ -e 's/pm\.min_spare_servers = \d/pm\.min_spare_servers = 20/' \
+ -e 's/pm\.max_spare_servers = \d/pm\.max_spare_servers = 35/' \
+ -e 's/pm\.max_requests = \d/pm\.max_requests = 500/' \
+ -e 's/pm\.process_idle_timeout = .+?/pm\.process_idle_timeout = 10s/' \
+ /usr/local/etc/php-fpm.d/www.conf
+ 
+
 #####################################
 # Aliases:
 #####################################
@@ -189,7 +199,7 @@ COPY ./.docker/php-nginx_buster/config/start.sh /
 
 COPY --chown=www-data:www-data ./ /var/www/html/laravel
 
-EXPOSE 80 443
+EXPOSE 80 443 6001
 
 ADD ./.docker/php-nginx_buster/config/start.sh /start.sh
 RUN chmod 755 /start.sh
