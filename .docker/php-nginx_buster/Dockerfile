@@ -63,6 +63,8 @@ RUN docker-php-ext-install pdo_pgsql
 # Install the PHP bcmath extension
 RUN docker-php-ext-install bcmath
 
+RUN docker-php-ext-install sockets
+
 #####################################
 # Imagick:
 #####################################
@@ -148,7 +150,7 @@ RUN sed -i -e 's/pm = .+?/pm = dynamic/' \
  -e 's/pm\.max_requests = \d/pm\.max_requests = 500/' \
  -e 's/pm\.process_idle_timeout = .+?/pm\.process_idle_timeout = 10s/' \
  /usr/local/etc/php-fpm.d/www.conf
- 
+
 
 #####################################
 # Aliases:
